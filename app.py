@@ -8,6 +8,7 @@ import plotly.figure_factory as ff
 import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy
+import zipfile
 with zipfile.ZipFile("athlete_events.zip") as z:
     with z.open("athlete_events.csv") as f:
         df = pd.read_csv(f)
