@@ -8,13 +8,23 @@ import plotly.figure_factory as ff
 import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy
+@st.cache_data
+def load_csv_from_gdrive(gdrive_url):
+    response = requests.get(gdrive_url)
+    if response.status_code == 200:
+        data = StringIO(response.text)
+        return pd.read_csv(data)
+    else:
+        st.error("Failed to download data from Google Drive.")
+        return pd.DataFrame()
 
-csv_url = "https://drive.google.com/uc?export=download&id=1-QF7iqTCAWc5K7GmL3JY1r_LGAj0CoQQ"
-csv1_url = "https://drive.google.com/uc?export=download&id=1gWxE7NosfcxcRtsulifGss0UAxzezMPu"
-def load_data(url):
-    return pd.read_csv(url)
-df = load_data(csv_url)
-region_df = load_data(csv1_url)
+# Google Drive links
+athlete_csv_url = "https://drive.google.com/uc?export=download&id=1-QF7iqTCAWc5K7GmL3JY1r_LGAj0CoQQ"
+region_csv_url = "https://drive.google.com/uc?export=download&id=1gWxE7NosfcxcRtsulifGss0UAxzezMPu"
+
+# Load data safely
+df = load_csv_from_gdrive(athlete_csv_url)
+region_df = load_csv_from_gdrive(region_csv_url)
 df = preprocess.preprocess(df, region_df)
 st.sidebar.header(' Olympics Dashboard')
 user_options = st.sidebar.radio("Select an Option",["Medal Tally","Overall Analysis","Country-Wise Analysis", "Athlete-Wise Analysis"])
