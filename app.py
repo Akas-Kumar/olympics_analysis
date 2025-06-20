@@ -9,22 +9,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy
 @st.cache_data
-def load_csv_from_gdrive(gdrive_url):
-    response = requests.get(gdrive_url)
-    if response.status_code == 200:
-        data = StringIO(response.text)
-        return pd.read_csv(data)
-    else:
-        st.error("Failed to download data from Google Drive.")
-        return pd.DataFrame()
+def load_csv_from_gdrive(file_id):
+    # Generate the correct URL
+    url = f"https://drive.google.com/uc?id={file_id}"
+    # Download the file to memory
+    output = 'temp.csv'
+    gdown.download(url, output, quiet=False)
+    return pd.read_csv(output)
 
-# Google Drive links
-athlete_csv_url = "https://drive.google.com/uc?export=download&id=1-QF7iqTCAWc5K7GmL3JY1r_LGAj0CoQQ"
-region_csv_url = "https://drive.google.com/uc?export=download&id=1gWxE7NosfcxcRtsulifGss0UAxzezMPu"
+# File IDs
+athlete_file_id = "1-QF7iqTCAWc5K7GmL3JY1r_LGAj0CoQQ"
+region_file_id = "1gWxE7NosfcxcRtsulifGss0UAxzezMPu"
 
-# Load data safely
-df = load_csv_from_gdrive(athlete_csv_url)
-region_df = load_csv_from_gdrive(region_csv_url)
+# Load the data
+df = load_csv_from_gdrive(athlete_file_id)
+region_df = load_csv_from_gdrive(region_file_id)
 df = preprocess.preprocess(df, region_df)
 st.sidebar.header(' Olympics Dashboard')
 user_options = st.sidebar.radio("Select an Option",["Medal Tally","Overall Analysis","Country-Wise Analysis", "Athlete-Wise Analysis"])
