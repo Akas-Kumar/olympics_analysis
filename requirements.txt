@@ -3,5 +3,4 @@ plotly
 seaborn
 matplotlib
 scipy
-requests
-gdown
+zipfile
