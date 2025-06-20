@@ -9,8 +9,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy
 
-df = pd.read_csv(r"C:\Users\2023a\Downloads\athlete_events.csv")
-region_df = pd.read_csv(r"C:\Users\2023a\Downloads\noc_regions.csv")
+csv_url = "https://drive.google.com/uc?export=download&id=1-QF7iqTCAWc5K7GmL3JY1r_LGAj0CoQQ"
+csv1_url = "https://drive.google.com/uc?export=download&id=1gWxE7NosfcxcRtsulifGss0UAxzezMPu"
+def load_data(url):
+    return pd.read_csv(url)
+df = load_data(csv_url)
+region_df = load_data(csv1_url)
 df = preprocess.preprocess(df, region_df)
 st.sidebar.header(' Olympics Dashboard')
 user_options = st.sidebar.radio("Select an Option",["Medal Tally","Overall Analysis","Country-Wise Analysis", "Athlete-Wise Analysis"])
